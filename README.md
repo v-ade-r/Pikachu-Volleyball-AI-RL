@@ -34,7 +34,7 @@ See [Controls](#controls) below for keyboard bindings.
 
 ## Training algorithm
 
-Training uses **Proximal Policy Optimization (PPO)** in a **self-play** setup. The policy and value function are **separate neural networks** (actor and critic), each a 256→256 MLP with Tanh activations — no shared backbone, so critic and policy gradients do not interfere as opponents evolve.
+The agent is trained via **Proximal Policy Optimization (PPO)** in a **self-play**  setup. To ensure stability the policy (actor) and value function (critic) use entirely separate 256x256 neural networks with Tanh activations. Avoiding a shared backbone eliminates gradient interference. This separation is crucial in self-play: as the opponent's strategy evolves and value targets shift, independent networks prevent volatile critic gradients from destabilizing the policy features, ensuring robust convergence.
 
 After an initial warm-up against a **random opponent**, the agent enters **league self-play**: each rollout samples an opponent from a pool of past checkpoints (prioritized fictitious self-play). The opponent runs with **frozen weights** and only the learning agent's side is optimized.
 
