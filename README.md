@@ -2,11 +2,41 @@
 
 PPO self-play training and a desktop app to play against the trained AI in Pikachu Volleyball.
 
+<p align="center">
+  <img src="assets/demo.gif" alt="Human vs AI gameplay" width="700"/>
+</p>
+
+## Download and play
+
+Download the latest desktop build from the [**GitHub Releases**](https://github.com/v-ade-r/Pikachu-Volleyball-AI-RL/releases/latest) page.
+
+The release includes:
+- **Linux / WSL** — `PikachuVolleyball_.Linux_WSL.zip`
+- **Windows** — `PikachuVolleyball_.Windows.zip`
+
+No Python installation is required to play the packaged version.
+
+**Linux / WSL**
+
+```bash
+unzip PikachuVolleyball_.Linux_WSL.zip
+chmod +x PikachuVolleyball
+./PikachuVolleyball
+```
+
+On WSL, you need a graphical session (WSLg on Windows 11, or an X server).
+
+**Windows**
+
+Extract the zip, run **`PikachuVolleyball.exe`**
+
+See [Controls](#controls) below for keyboard bindings.
+
 ## Training algorithm
 
 Training uses **Proximal Policy Optimization (PPO)** in a **self-play** setup. The policy and value function are **separate neural networks** (actor and critic), each a 256→256 MLP with Tanh activations — no shared backbone, so critic and policy gradients do not interfere as opponents evolve.
 
-After an initial warm-up against a **random opponent**, the agent enters **league self-play**: each rollout samples an opponent from a pool of past checkpoints (prioritized fictitious self-play). The opponent runs with **frozen weights** (`eval()`, no gradient updates); only the learning agent's side is optimized.
+After an initial warm-up against a **random opponent**, the agent enters **league self-play**: each rollout samples an opponent from a pool of past checkpoints (prioritized fictitious self-play). The opponent runs with **frozen weights** and only the learning agent's side is optimized.
 
 Each PPO update follows the standard two-phase loop:
 
@@ -16,7 +46,7 @@ Each PPO update follows the standard two-phase loop:
    - **Value loss** — MSE between predicted values and GAE returns
    - **Entropy bonus** — encourages exploration; coefficient **decays linearly** from 0.05 to 0.01 over training
 
-A single policy controls both sides of the court (observations are mirrored for player 2). The trained actor is exported to ONNX for real-time inference in the desktop app.
+The trained actor is exported to ONNX for real-time inference in the desktop app.
 
 ## Requirements
 
