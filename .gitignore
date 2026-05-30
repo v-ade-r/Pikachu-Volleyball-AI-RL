@@ -1,0 +1,16 @@
+.venv/
+__pycache__/
+*.pyc
+build/
+dist/
+wandb/
+*.Zone.Identifier
+.DS_Store
+
+# Training artifacts (generated locally)
+models/*.onnx
+models/*.pth
+pikachu_ppo_checkpoint_*.pth
+pikachu_ppo_final.pth
+pikachu_actor.onnx
+learning_curve_Pikachu_PPO.png
